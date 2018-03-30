@@ -23,12 +23,16 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 8080,
+    port: 9080,
     // autoOpenBrowser: false,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable:  {
+      '/face_swapper/':{
+        changeOrigin: true,
+        target:'http://120.92.51.5:9000'
+      }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

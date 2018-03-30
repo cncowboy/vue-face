@@ -30,68 +30,6 @@ const router = new Router({
         require(['@/components/index'], resolve);
       }
     },
-    {
-      path: '/topList',
-      name: 'topList',
-      component(resolve) {
-        require(['@/components/topList'], resolve);
-      }
-    },
-    {
-    	path: '/rankList/:id',
-    	name: 'rankList',
-    	component(resolve) {
-        require(['@/components/rankList'], resolve);
-    	}
-    },
-    {
-      path: '/recommend/:id',
-      name: 'recommend',
-      component(resolve) {
-        require(['@/components/recommend'], resolve);
-      }
-    },
-    {
-      path: '/playing',
-      name: 'playing',
-      meta: {
-        noPageAnimation: true
-      },
-      beforeEnter(to, from, next) {
-        store.state.playing.songlist.length > 0 && next();
-      },
-      component(resolve) {
-        require(['@/components/playing'], resolve);
-      }
-    },
-    {
-      path: '/special',
-      name: 'special',
-      component(resolve) {
-        require(['@/components/special'], resolve);
-      }
-    },
-    {
-      path: '/radio',
-      name: 'radio',
-      component(resolve) {
-        require(['@/components/radio'], resolve);
-      }
-    },
-    {
-      path: '/singerlist',
-      name: 'singerlist',
-      component(resolve) {
-        require(['@/components/singerlist'], resolve);
-      }
-    },
-    {
-      path: '/singer/:id',
-      name: 'singer',
-      component(resolve) {
-        require(['@/components/singer'], resolve);
-      }
-    }
   ]
 });
 

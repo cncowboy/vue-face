@@ -74,12 +74,6 @@
 			}
 		},
 		components: {
-			playFixed(resolve) {
-				require(['@/components/play-fixed.vue'], resolve);
-			},
-			listView(resolve) {
-				require(['@/components/list.vue'], resolve);
-			}
 		}
 	};
 </script>

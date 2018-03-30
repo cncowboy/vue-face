@@ -15,7 +15,7 @@ import 'swiper/dist/css/swiper.css';
 Vue.config.productionTip = false;
 
 // Sync Register Global Components
-Vue.component('fallback', resolve => resolve(require('./components/fallback')));
+//Vue.component('fallback', resolve => resolve(require('./components/fallback')));
 
 
 /* eslint-disable no-new */

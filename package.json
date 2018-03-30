@@ -1,8 +1,8 @@
 {
-  "name": "vue-qqmusic",
+  "name": "vue-face",
   "version": "1.0.0",
-  "description": "Vue QQMusic Project",
-  "author": "494873674@qq.com",
+  "description": "Vue face replace",
+  "author": "cncowboy@qq.com",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
@@ -15,16 +15,19 @@
   "dependencies": {
     "@tweenjs/tween.js": "^17.1.0",
     "alloytouch": "^0.2.4",
+    "axios": "^0.18.0",
     "base-64": "^0.1.0",
     "css3transform": "^1.1.5",
     "hammerjs": "^2.0.8",
     "iscroll": "^5.2.0",
+    "mavatar": "^1.1.3",
     "mint-ui": "^2.2.3",
     "stackblur-canvas": "^1.4.0",
     "utf8": "^2.1.2",
     "velocity-animate": "^1.5.0",
     "vue": "^2.3.3",
     "vue-awesome-swiper": "^2.4.2",
+    "vue-fraction-grid": "^1.1.0",
     "vue-router": "^2.2.0",
     "vuex": "^2.3.0"
   },

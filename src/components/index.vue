@@ -1,91 +1,39 @@
 <template>
 	<div class="page">
 		<mt-header fixed
-				   title="音乐馆"
+				   title="换头像"
 				   class="music-header scroll-header"
 				   :style="searchVisible && {top: '-40px'}"></mt-header>
-		<form @submit="searching">
-			<search-vue v-model="searchValue"
-					    :visible.sync="searchVisible"
-					    :style="searchVisible && {top: '-40px', height: '100%',height: '100vh'}">
-				<div class="hotkey-wrapper" v-if="searchState == 0">
-					<p>热门搜索</p>
-					<ul class="hotkey-list">
-						<template v-for="(item, index) in hotkeys">
-						    <template v-if="index == 0 ">
-						    	<li class="speical" @click="goSpecial(item.url)">{{ item.k }}</li>
-						    </template>
-						    <template v-else>
-						    	<li @click="hoykeySearch(item.k)">{{ item.k }}</li>
-						    </template>
-					    </template>
-					</ul>
-				</div>
-				<div class="result-list" v-if="searchState == 2">
-					<mt-cell class="music-cell-type5"
-					         v-for="(item, index) in searchResult"
-					         :key="index"
-					         @click.native="playSingleMusic(item)">
-					    <i class="music-icon"></i>
-					    <div class="song-wrapper">
-					    	<p>{{ item.name }}</p>
-						    <p>{{ item.singer }}</p>
-					    </div>
-					</mt-cell>
-				</div>
-		    </search-vue>
-		</form>
-		<div class="page-content" style="margin-top: 84px;padding-top: 0;">
-			<swiper :options="swiperOption" ref="mySwiper">
-				<swiper-slide v-for="(item, index) in indexMsg.slider" :key="index">
-					<img :src="item.picUrl" class="slider-item" @click="goSpecial(item.linkUrl)">
-				</swiper-slide>
-				<div class="swiper-pagination"  slot="pagination"></div>
-			</swiper>
-			<ul class="radio-list">
-				<li v-for="item in musiclist" @click="$router.push({name: item.route})">
-					<img class="icon" :src="require(`../assets/${item.icon}`)">
-					<span class="name">{{ item.name }}</span>
-				</li>
-			</ul>
-			<div class="recommend-wrapper">
-				<p class="title">热 门 推 荐</p>
-				<ul class="recommend-list">
-					<router-link v-for="(item, index) in indexMsg.songList"
-								 tag="li"
-								 :key="index"
-								 :to="{ name: 'recommend', params: {id: item.id}}">
-						<div class="cover-wrapper">
-							<img :src="item.picUrl">
-							<span class="listen-count">
-								<i class="listen-icon"></i>
-								{{ item.accessnum | listenFormat }}万
-							</span>
-							<i class="listen-play"></i>
-						</div>
-						<span class="song-desc">{{ item.songListDesc }}</span>
-					</router-link>
-				</ul>
-			</div>
+          <container>
+            <grid>
+              <grid-item size="1/3">
+                <div id = "avatar"/>
+              </grid-item>
+              <grid-item size="1/3">
+                <photo-upload @input="handleFileUpload" :value="value"></photo-upload>
+              </grid-item>
+              <grid-item size="1/3">
+                <button  @click="changeFace">更换头像</button>
+              </grid-item>
+            </grid>
+          </container>
 		</div>
 	</div>
 </template>
 
 <script>
 	/* ==========================================================
-	 * 					 	QQ音乐 首页
-	 *	已完成功能：
-	 *		1： 歌曲搜索
-	 *  Issuse：
-	 *		这里在搜索功能上有点问题， 由于QQ音乐Api的跨域限制无法获取
-	 *		搜索结果改为获取临时的结果， 无法获取完成歌曲信息，因此缺少了封面
-	 *		在这里欢迎大家提供更好的意见
 	 * ========================================================== */
 	import { apiHandler } from '@/api/index';
 	import { swiper, swiperSlide } from 'vue-awesome-swiper';
+    import axios from 'axios';
 	import store from '../store';
 	import { dealHotkey } from '../util';
-	import searchVue from './search';
+    import Mavatar from 'mavatar';
+    import PhotoUpload from './PhotoUpload';
+    import Container from 'vue-fraction-grid/components/Container';
+    import Grid from 'vue-fraction-grid/components/Grid';
+    import GridItem from 'vue-fraction-grid/components/GridItem';
 
 	// Vuex Playing Module NameSpace
 	const NameSpace = 'playing';
@@ -100,95 +48,46 @@
 		    });
 	      });
 	    },
+        mounted: function () {
+            window.avatar = new Mavatar({
+                el: '#avatar',
+                backgroundColor: '#ff6633'
+            });
+        },
 		data() {
 			return {
-				indexMsg: {},
-				searchVisible: false,
-				searchValue: '',	   // input value,
-				searchState: 0,        // search input bar state 0: ready, 1: searching, 2: search result,
-				searchResult: {},      // song search result
-				banners: [],
-				hotkeys: {},
-				musiclist: [
-					{
-						icon: 'people.png',
-						name: '歌手',
-						route: 'singerlist'
-					},
-					{
-						icon: 'rank.png',
-						name: '排行',
-						route: 'topList'
-					},
-					{
-						icon: 'radio.png',
-						name: '电台',
-						route: 'radio'
-					}
-				],
-				swiperOption: {
-		          autoplay: 5000,
-		          initialSlide: 1,
-		          loop: true,
-		          pagination: '.swiper-pagination'
-		        }
+                destPhotoFile: undefined
 			};
 		},
 		methods: {
 			// searching the song by the hotkey
-			hoykeySearch(hotkey) {
-				this.searchValue = hotkey;
-				this.searching();
-			},
-			searching(e) {
-				e && e.preventDefault();
-				let searchValue = this.searchValue;
-				this.searchState = 1; // searching
-
-				apiHandler({
-					name: 'search',
-					params: {
-		        		key: searchValue
-		        	}
-				}, response => {
-					this.searchState = 2; // search result
-					this.searchResult = response.data.song.itemlist || [];
-				});
-			},
-			// 用于搜索页面歌曲播放，由于QQ音乐搜索API跨域限制这里无法获取到封面信息
-			playSingleMusic(song = {}) {
-				let songObj = {
-					data: {
-						songid: song.id,
-						songname: song.name,
-						singer: [{
-							name: song.singer
-						}]
-					}
-				};
-				store.commit(NameSpace + '/stackSonglist', songObj);
-				store.dispatch(NameSpace + '/playSong', 0);
-			}
+            handleFileUpload(file) {
+              this.destPhotoFile = file;
+            },
+            changeFace() {
+                const self = this;
+                if (!this.destPhotoFile) return;
+                window.avatar.imageClipper(function(dataurl) {
+                    const formData = window.avatar.getformData('head', dataurl);
+                    formData.append('dest_photo', self.destPhotoFile);
+                    let config = {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }
+                    axios.post('/face_swapper/', formData, config).then( res => {
+                        console.log(res)
+                    }).catch( res => {
+                        console.log(res)
+                    })
+                });
+            },
 		},
 		watch: {
-			searchVisible(visible) {
-				if (!visible) {
-					this.searchState = 0;
-					this.searchResult = [];
-				}
-			},
-			searchState(state) {
-				if (state == 1) {
-					this.$indicator.open(`正在搜索${this.searchValue}`);
-				}else {
-					this.$indicator.close();
-				}
-			}
 		},
 		components: {
-			swiper,
-			swiperSlide,
-			searchVue
+            Mavatar,
+            PhotoUpload
 		}
 	};
 </script>
