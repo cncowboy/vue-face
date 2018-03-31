@@ -5,10 +5,6 @@
 		  <router-view></router-view>
 	  	<!-- </keep-alive> -->
 	  </transition>
-	  <play-fixed></play-fixed>
-  	  <transition name="list-view">
-	  	<component :is="showlist && 'listView'"></component>
-	  </transition>
   </div>
 </template>
 
@@ -58,7 +54,6 @@
 		},
 		computed: {
 			...mapState('transition', ['transitionName']),
-			...mapState('list', {showlist: 'show'})
 		},
 		methods: {
 			// Clear Transition Effects After Each Switch

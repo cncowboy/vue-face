@@ -30,6 +30,27 @@ const router = new Router({
         require(['@/components/index'], resolve);
       }
     },
+    {
+      path: '/select_sport',
+      name: 'select_sport',
+      component(resolve) {
+        require(['@/components/select_sport'], resolve);
+      }
+    },
+    {
+      path: '/select_head',
+      name: 'select_head',
+      component(resolve) {
+        require(['@/components/select_head'], resolve);
+      }
+    },
+    {
+      path: '/show_result',
+      name: 'show_result',
+      component(resolve) {
+        require(['@/components/show_result'], resolve);
+      }
+    }
   ]
 });
 

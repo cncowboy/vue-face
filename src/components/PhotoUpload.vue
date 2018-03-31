@@ -94,12 +94,23 @@
                 preview: null
             }
         },
+        watch:{
+            value(){
+                if (this.value) {
+                    this.preview = this.value;
+                }
+            }
+        },
         computed: {
             backgroundImage() {
                 let image = this.preview || this.value;
+                if (!this.value) {
+                    console.log('prop value is empty');
+                }
                 if (!image) {
                     return null;
                 }
+                console.log('select image change');
                 return `url('${image}')`;
             }
         }
