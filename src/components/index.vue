@@ -1,11 +1,11 @@
 <template>
     <container>
-        <grid>
+    <grid horizontal="center" :style="styleObject">
           <grid-item >
               <span>想看看你10年后的样子吗？</span>
           </grid-item>
         </grid>
-        <grid>
+        <grid horizontal="center">
           <grid-item >
             <router-link to="/select_head">很想</router-link>
           </grid-item>
@@ -28,6 +28,9 @@
         },
 		data() {
 			return {
+                styleObject: {
+                    paddingTop: '200px'
+                }
 			};
 		},
         computed:{

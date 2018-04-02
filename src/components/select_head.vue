@@ -1,6 +1,6 @@
 <template>
        <container>
-            <grid horizontal="center">
+            <grid horizontal="center" :style="styleObject">
               <grid-item horizontal="center">
                 <div id = "avatar"/>
               </grid-item>
@@ -17,7 +17,7 @@
 
             <grid horizontal="center">
               <grid-item >
-                <button  @click="nextStep">查看结果</button>
+                <mt-button type="primary"  @click="nextStep">查看结果</mt-button>
               </grid-item>
             </grid>
 
@@ -34,7 +34,7 @@
 	import store from '../store';
 	import { dealHotkey } from '../util';
     import Mavatar from 'mavatar';
-    import { Picker, Toast } from 'mint-ui';
+    import { Picker, Toast, Button, Indicator } from 'mint-ui';
 
 	export default {
 		name: 'select_head',
@@ -48,6 +48,9 @@
         },
 		data() {
 			return {
+                styleObject: {
+                    paddingTop: '20px'
+                },
                 slots:[
                   {
                     values: ['不动动', '一周运动2次', '每天都运动']
@@ -71,10 +74,16 @@
                 const self = this;
                 console.log('nextStep');
                 if (window.avatar.getfileInfo()) {
+                    Indicator.open({
+                        text: '处理中...',
+                        spinnerType: 'fading-circle'
+                    });
+
                     window.avatar.imageClipper(function(dataurl) {
                         self.$store.dispatch("face/headFile", dataurl);
                         self.getFaceInfo(dataurl, result=>{
                             if (result.error_message) {
+                                Indicator.close();
                             } else {
                                 console.log(result);
                                 const face = result.data.faces[0];
@@ -83,9 +92,14 @@
                                 self.$store.dispatch("face/headInfo", 
                                     {'gender': gender,  'age': age});
                                 self.changeFace(dataurl, gender, age, ret=>{
-                                    self.$store.dispatch("face/resultPhotoFile", ret.data.data);
-                                    //self.resultPhotoFile = ret.data.data;
-                                    self.$router.push('show_result');
+                                    Indicator.close();
+                                    if (ret.data.code !=0 ) {
+                                        Toast('处理失败');
+                                    } else {
+                                        self.$store.dispatch("face/resultPhotoFile", ret.data.data);
+                                        //self.resultPhotoFile = ret.data.data;
+                                        self.$router.push('show_result');
+                                    }
                                 });
                             }
                         });
@@ -107,11 +121,12 @@
                 formData.append('image_base64', fileData);
                 formData.append('return_landmark', 0);
                 formData.append('return_attributes', 'gender,age');
-                const url = 'https://api-cn.faceplusplus.com/facepp/v3/detect';
+                const url = '/facepp/v3/detect';//https://api-cn.faceplusplus.com
                 axios.post(url, formData, config).then( res => {
                     callback(res);
                 }).catch( error => {
                     console.log(error);
+                    callback({error_message: '分析头像出错'});
                 });
 
             },
@@ -131,6 +146,7 @@
                         callback(res);
                     }).catch( error => {
                         console.log(error);
+                        callback({data: {code: -1}});
                     })
                 });
             },

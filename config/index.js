@@ -31,7 +31,14 @@ module.exports = {
     proxyTable:  {
       '/face_swapper/':{
         changeOrigin: true,
+        //target:'http://123.207.122.154:9900'
         target:'http://120.92.51.5:9000'
+      },
+      '/facepp/v3/detect':{
+        changeOrigin: true,
+        //target:'http://123.207.122.154:9900'
+        secure: false,
+        target:'https://api-cn.faceplusplus.com'
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
