@@ -81,9 +81,11 @@
 
                     window.avatar.imageClipper(function(dataurl) {
                         self.$store.dispatch("face/headFile", dataurl);
+                        const gender = 'male';
+                        const age = 21;
                         self.getFaceInfo(dataurl, result=>{
                             if (result.error_message) {
-                                Indicator.close();
+                                //Toast('识别头像失败:'+result.error_message);
                             } else {
                                 console.log(result);
                                 const face = result.data.faces[0];
@@ -91,18 +93,20 @@
                                 const age = face.attributes.age.value;
                                 self.$store.dispatch("face/headInfo", 
                                     {'gender': gender,  'age': age});
-                                self.changeFace(dataurl, gender, age, ret=>{
-                                    Indicator.close();
-                                    if (ret.data.code !=0 ) {
-                                        Toast('处理失败');
-                                    } else {
-                                        self.$store.dispatch("face/resultPhotoFile", ret.data.data);
-                                        //self.resultPhotoFile = ret.data.data;
-                                        self.$router.push('show_result');
-                                    }
-                                });
                             }
                         });
+
+                        self.changeFace(dataurl, gender, age, ret=>{
+                            Indicator.close();
+                            if (ret.data.code !=0 ) {
+                                Toast('处理失败');
+                            } else {
+                                self.$store.dispatch("face/resultPhotoFile", ret.data.data);
+                                //self.resultPhotoFile = ret.data.data;
+                                self.$router.push('show_result');
+                            }
+                        });
+
                     });
                 }else{
                     console.log('has not select head photo');
