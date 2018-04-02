@@ -2,12 +2,23 @@
     <container>
         <grid horizontal="center">
             <grid-item >
-                <photo-upload :value="resultPhotoFile"></photo-upload>
+                <img :src="resultPhotoFile"  v-bind:class="file-photo" />
             </grid-item>
         </grid>
         <grid horizontal="center">
             <grid-item >
-                <img :src="resultPhotoFile" />
+                年龄
+            </grid-item>
+            <grid-item >
+                {{headAge}} 
+            </grid-item>
+        </grid>
+        <grid horizontal="center">
+            <grid-item >
+                性别
+            </grid-item>
+            <grid-item >
+                {{headGender}}
             </grid-item>
         </grid>
 
@@ -84,5 +95,14 @@
 </script>
 
 <style lang="sass">
+  .file-photo {
+    position: absolute;
+    width: 300px;
+    height: 400px;
+    top: -50px;
+    left: 0;
+    z-index: 2;
+    opacity: 0;
+  }
 
 </style>

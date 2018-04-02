@@ -40,18 +40,18 @@ export default new Vuex.Store({
 			mutations: {
 				// play or pause music
 				setHeadFile(state, file) {
-                    this.state.headFile = file;
+                    state.headFile = file;
 				},
 				setHeadInfo(state, info) {
-                    this.state.gender = info.gender;
-                    this.state.age = info.age;
+                    state.gender = info.gender;
+                    state.age = info.age;
                 },
 				setDestPhotoFile(state, file) {
-                    this.state.destPhotoFile = file;
+                    state.destPhotoFile = file;
 				},
 				setResultPhotoFile(state, file) {
                     console.log('recv result photo file');
-                    this.state.resultPhotoFile = file;
+                    state.resultPhotoFile = file;
 				}
 			},
 			actions: {
