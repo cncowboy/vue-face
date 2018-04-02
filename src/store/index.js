@@ -32,26 +32,40 @@ export default new Vuex.Store({
 				// playing song detail msg
                 sportType: 0,
                 age: 20,
-                sex: 0,
+                gender: '',
                 headFile: undefined,
                 destPhotoFile: undefined,
                 resultPhotoFile: undefined
 			},
 			mutations: {
 				// play or pause music
+				setHeadFile(state, file) {
+                    this.state.headFile = file;
+				},
+				setHeadInfo(state, info) {
+                    this.state.gender = info.gender;
+                    this.state.age = info.age;
+                },
 				setDestPhotoFile(state, file) {
-                    state.destPhotoFile = file;
+                    this.state.destPhotoFile = file;
 				},
 				setResultPhotoFile(state, file) {
-                    state.resultPhotoFile = file;
+                    console.log('recv result photo file');
+                    this.state.resultPhotoFile = file;
 				}
 			},
 			actions: {
+				headFile({state, dispatch}, file) {
+                    this.commit('face/setHeadFile', file);
+				},
+				headInfo({state, dispatch}, info) {
+                    this.commit('face/setHeadInfo', info);
+				},
 				destPhotoFile({state, dispatch}, file) {
-                    commit('setDestPhotoFile', file);
+                    this.commit('face/setDestPhotoFile', file);
 				},
 				resultPhotoFile({state, dispatch}, file) {
-                    commit('setResultPhotoFile', file);
+                    this.commit('face/setResultPhotoFile', file);
 				}
 			}
 		}

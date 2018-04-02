@@ -20,7 +20,7 @@
     "css3transform": "^1.1.5",
     "hammerjs": "^2.0.8",
     "iscroll": "^5.2.0",
-    "mavatar": "^1.1.3",
+    "mavatar": "git+https://github.com/cncowboy/Mavatar.git",
     "mint-ui": "^2.2.3",
     "stackblur-canvas": "^1.4.0",
     "utf8": "^2.1.2",
